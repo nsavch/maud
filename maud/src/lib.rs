@@ -164,7 +164,7 @@ macro_rules! impl_render_with_display {
 }
 
 impl_render_with_display! {
-    char f32 f64
+    char f32 f64 rust_decimal::Decimal chrono::NaiveDateTime
 }
 
 macro_rules! impl_render_with_itoa {
@@ -270,6 +270,7 @@ mod rocket_support {
     extern crate std;
 
     use crate::PreEscaped;
+    use crate::Render;
     use alloc::string::String;
     use rocket::{
         http::{ContentType, Status},
@@ -278,13 +279,17 @@ mod rocket_support {
     };
     use std::io::Cursor;
 
-    impl Responder<'static> for PreEscaped<String> {
-        fn respond_to(self, _: &Request) -> Result<Response<'static>, Status> {
+    impl<'r> Responder<'r, 'static> for PreEscaped<String> {
+        fn respond_to(self, _: &'r Request) -> Result<Response<'static>, Status> {
             Response::build()
                 .header(ContentType::HTML)
-                .sized_body(Cursor::new(self.0))
+                .sized_body(self.0.len(), Cursor::new(self.0))
                 .ok()
         }
+    }
+
+    impl_render_with_display! {
+        rocket::http::uri::Origin<'_>
     }
 }
 
