@@ -21,7 +21,7 @@ axum = ["axum-core", "http"]
 [dependencies]
 maud_macros = { version = "0.24.0", path = "../maud_macros" }
 itoa = "1"
-rocket = { version = "0.5.0-rc.2", optional = true }
+rocket = { git="https://github.com/SergioBenitez/Rocket/", rev="59ee2e033986f4bdfd465dcf8dbfc9a381c2ae2e", optional = true }
 futures-util = { version = "0.3.0", optional = true, default-features = false }
 actix-web-dep = { package = "actix-web", version = "4", optional = true, default-features = false }
 tide = { version = "0.16.0", optional = true, default-features = false }
